@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "metrics": {
+    "production_loc": 2306,
+    "production_files": 42,
+    "production_packages": 19,
+    "test_files": 20,
+    "production_functions": 180,
+    "decision_points": 294
+  },
+  "persistence": {
+    "module": "go.etcd.io/bbolt",
+    "entities": ["Record", "AuditEvent", "Workflow", "Attachment"],
+    "reopen_test": "TestPersistenceSurvivesReopen"
+  },
+  "workflows": [
+    {
+      "steps": ["register recommendation", "submit for review", "approve or reject", "archive record"],
+      "test": "TestWorkflowCreateReviewArchive"
+    },
+    {
+      "steps": ["search store recommendations", "select a record", "update book details", "publish recommendation"],
+      "test": "TestWorkflowSearchUpdatePublish"
+    },
+    {
+      "steps": ["import deterministic CSV", "validate each row", "persist records and audits", "generate report"],
+      "test": "TestWorkflowImportReport"
+    }
+  ]
+}
