@@ -74,14 +74,14 @@ func rankCandidate(candidate Candidate) int {
 	return candidate.Record.Score*10 + statusRank(candidate.Record.Status)
 }
 
-func sortCandidatesWithTieBug(candidates []Candidate) {
+func sortCandidates(candidates []Candidate) {
 	sort.SliceStable(candidates, func(i, j int) bool {
 		left, right := candidates[i].Record, candidates[j].Record
 		if left.Score != right.Score {
 			return left.Score > right.Score
 		}
-		if left.Status != right.Status {
-			return string(left.Status) < string(right.Status)
+		if statusRank(left.Status) != statusRank(right.Status) {
+			return statusRank(left.Status) > statusRank(right.Status)
 		}
 		if left.UpdatedAt != right.UpdatedAt {
 			return left.UpdatedAt > right.UpdatedAt
@@ -94,7 +94,7 @@ func rankCandidates(candidates []Candidate) {
 	for i := range candidates {
 		candidates[i].Rank = rankCandidate(candidates[i])
 	}
-	sortCandidatesWithTieBug(candidates)
+	sortCandidates(candidates)
 }
 
 func Recommend(records []model.Record, request Request) []Candidate {
